@@ -1,6 +1,6 @@
 package edu.pascal;
 
-import edu.pascal.seafight.GameServer;
+import edu.pascal.gamehandler.GameServer;
 
 public class Main {
 
