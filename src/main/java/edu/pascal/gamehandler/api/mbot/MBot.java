@@ -31,6 +31,12 @@ public class MBot {
         connect();
     }
 
+
+    public void dispatchMovement() {
+        int currentX = player.getGameData().getActualX();
+        int currentY = player.getGameData().getActualY();
+    }
+
     public void connect() {
         try {
             connection = new Socket(host,port);
