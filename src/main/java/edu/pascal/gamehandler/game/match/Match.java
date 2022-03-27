@@ -1,5 +1,6 @@
 package edu.pascal.gamehandler.game.match;
 
+import edu.pascal.gamehandler.api.utils.Pathfinder;
 import edu.pascal.gamehandler.api.utils.TimeUtils;
 import edu.pascal.gamehandler.game.player.Player;
 import edu.pascal.gamehandler.game.player.data.GameData;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.UUID;
+import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
 @Getter
@@ -31,6 +33,8 @@ public class Match {
 
     public void moveToCell(Player player,int x,int y) {
         //Request to MBot
+        Vector<String> percorso = Pathfinder.TrovaStrada(player.getGameData().getActualX(),player.getGameData().getActualY(),x,y);
+
     }
 
 
