@@ -35,6 +35,7 @@ public class MBot {
     public void dispatchMovement() {
         int currentX = player.getGameData().getActualX();
         int currentY = player.getGameData().getActualY();
+
     }
 
     public void connect() {
