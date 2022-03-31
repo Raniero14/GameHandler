@@ -1,6 +1,7 @@
 package edu.pascal.gamehandler.websocket;
 
 import edu.pascal.gamehandler.GameServer;
+import edu.pascal.gamehandler.api.utils.game.GameCommand;
 import edu.pascal.gamehandler.websocket.wrapper.ConnectionWrapper;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
@@ -25,7 +26,9 @@ public class WebSocketHandler extends WebSocketServer {
 
     @Override
     public void onOpen(WebSocket conn, ClientHandshake handshake) {
-        api.getGameController().getJoinQueue().add(new ConnectionWrapper(conn));
+        ConnectionWrapper wrapper = new ConnectionWrapper(conn);
+        socketMap.put(conn.getRemoteSocketAddress(),wrapper);
+        api.getGameController().getJoinQueue().add(wrapper);
     }
 
     @Override
@@ -40,7 +43,16 @@ public class WebSocketHandler extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket conn, String message) {
-
+        ConnectionWrapper wrapper = socketMap.get(conn.getRemoteSocketAddress());
+        if(wrapper.getUuid() != null) {
+            api.getGameController().getPlayer(wrapper.getUuid())
+                    .ifPresent((player) -> {
+                        if(player.isInMatch()){
+                           api.getGameController().getMatchManager()
+                                   .getCommands().add(new GameCommand(player,message));
+                        }
+                    });
+        }
     }
 
     @Override

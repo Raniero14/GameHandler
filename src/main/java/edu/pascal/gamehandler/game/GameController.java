@@ -104,10 +104,10 @@ public class GameController {
         players.remove(uuid);
     }
 
-    public void handleJoin(ConnectionWrapper clientThread) {
+    public void handleJoin(ConnectionWrapper wrapper) {
         UUID uuid = UUID.randomUUID();
-        clientThread.setUuid(uuid);
-        Player player = new Player(uuid,clientThread);
+        wrapper.setUuid(uuid);
+        Player player = new Player(uuid,wrapper);
         player.sendMessage("il tuo UUID è: " + uuid);
         players.put(uuid,player);
         player.joinRoom(testRoom);

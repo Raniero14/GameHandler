@@ -21,7 +21,7 @@ public class GameServer {
     }
 
     public void enable(String[] args) {
-        System.out.println("Inizializzando Game Controller da lab_salaradio");
+        System.out.println("Inizializzando Game Controller");
         gameController = new GameController(this);
         System.out.println("Accendendo socket server...");
         webSocketHandler = new WebSocketHandler(this,new InetSocketAddress("0.0.0.0",8080));

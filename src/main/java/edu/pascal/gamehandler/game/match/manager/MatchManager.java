@@ -4,12 +4,15 @@ import edu.pascal.gamehandler.api.utils.game.GameCommand;
 import edu.pascal.gamehandler.api.utils.game.Tickable;
 import edu.pascal.gamehandler.game.GameController;
 import edu.pascal.gamehandler.game.match.Match;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+@Getter
 public class MatchManager implements Tickable {
 
     private final GameController api;
@@ -26,16 +29,23 @@ public class MatchManager implements Tickable {
     @Override
     public void tick(int currentTick) {
         while (!commands.isEmpty()) {
-            GameCommand command  = commands.poll();
-            if(command.getMatch().getCurrentTurn().equals(command.getPlayer().getUuid())) {
-                command.getMatch().moveToCell(command.getPlayer(),command.getX(),command.getY());
+            GameCommand gameCommand  = commands.poll();
+            Match match = gameCommand.getPlayer().getGameData().getMatch();
+            if(match.getCurrentTurn().equals(gameCommand.getPlayer().getUuid())) {
+                String[] array = gameCommand.getCommand().split(";");
+                switch (array[0].toLowerCase(Locale.ROOT)) {
+                    case "move":
+                        int x = Integer.parseInt(array[1]);
+                        int y = Integer.parseInt(array[2]);
+                        match.moveToCell(gameCommand.getPlayer(),x,y);
+                        break;
+                    case "message":
+                        break;
+                }
             }
         }
         for(Match match : matches) {
-            match.setTimer(match.getTimer() - 50);
-            if(match.getTimer() == 0) {
-                match.switchTurn();
-            }
+            match.tick(currentTick);
         }
     }
 }

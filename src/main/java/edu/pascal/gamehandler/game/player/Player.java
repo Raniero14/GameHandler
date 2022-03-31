@@ -21,7 +21,7 @@ public class Player {
     private GameData gameData;
 
     public void sendMessage(String str) {
-
+        connectionWrapper.getWebSocket().send("message;" + str);
     }
 
     public void joinRoom(Room<?> room) {
@@ -29,56 +29,8 @@ public class Player {
         room.handleJoin(this);
     }
 
-
-    /*
-    public void sendMessage(String message) {
-       if(!connectionThread.getSocket().isClosed()) {
-           try {
-               //ID
-               connectionThread.getOutput().writeInt(1);
-               //Messaggio
-               connectionThread.getOutput().writeUTF(message);
-               connectionThread.getOutput().flush();
-           } catch (IOException e) {
-               e.printStackTrace();
-           }
-       }
+    public boolean isInMatch() {
+        return gameData != null;
     }
-
-    public void sendMap(int[] ships) {
-        if(!connectionThread.getSocket().isClosed()) {
-            try {
-                //ID
-                connectionThread.getOutput().writeInt(2);
-                //Convertiamo la matrice in un array per inviarlo
-                byte[] array = new byte[ships.length];
-                for(int i  = 0;i < ships.length;i++) {
-                    array[i] = (byte) ships[i];
-                }
-                connectionThread.getOutput().write(array,0,array.length);
-                connectionThread.getOutput().flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void updateMap(int x,int y,byte type) {
-        if(!connectionThread.getSocket().isClosed()) {
-            try {
-                //ID
-                connectionThread.getOutput().writeInt(3);
-                connectionThread.getOutput().writeInt(x);
-                connectionThread.getOutput().writeInt(y);
-                connectionThread.getOutput().writeByte(type);
-                connectionThread.getOutput().flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-     */
-
-
 
 }

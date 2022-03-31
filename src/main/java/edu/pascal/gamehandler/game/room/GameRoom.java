@@ -71,7 +71,7 @@ public class GameRoom extends Room<List<Match>> {
         if(status == GameStatus.COUNTDOWN) {
             timer -= 1;
             if(timer == 0) {
-                supply();
+                api.getMatchManager().getMatches().addAll(supply());
                 api.getGameRoomManager().deleteRoom(getRoomId());
             } else if(timer % 20 == 0 && timer / 20 <= 10) {
                 broadcastMessage("Il gioco inizierà tra " + (timer / 20));

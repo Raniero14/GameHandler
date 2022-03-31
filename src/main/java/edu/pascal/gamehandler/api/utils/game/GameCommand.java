@@ -8,7 +8,6 @@ import lombok.Data;
 public class GameCommand {
 
     private final Player player;
-    private final Match match;
-    private final int x,y;
+    private final String command;
 
 }
