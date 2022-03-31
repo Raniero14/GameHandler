@@ -34,7 +34,6 @@ public class GameData {
             ships.add(x);
         }
         for(int x : ships) {
-            System.out.println(x);
             int row = x / 3;
             int col = x % 3;
             matrix[row][col] = (byte) ThreadLocalRandom.current().nextInt(5);

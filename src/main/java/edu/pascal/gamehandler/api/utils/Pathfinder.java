@@ -8,7 +8,7 @@ public class Pathfinder {
 
     //NORD = 0; SUD = 1
     //OVEST = 0; EST = 1
-    public static Vector<String> TrovaStrada(int xAttuale, int yAttuale, int xArrivo, int yArrivo){
+    public static Vector<String> trovaStrada(int xAttuale, int yAttuale, int xArrivo, int yArrivo){
 
         Vector<String> percorso = new Vector<>();
         int orientamento = 0; int spostamentoY; int spostamentoX; boolean gira;
