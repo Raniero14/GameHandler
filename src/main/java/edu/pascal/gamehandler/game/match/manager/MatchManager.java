@@ -4,12 +4,10 @@ import edu.pascal.gamehandler.api.utils.game.GameCommand;
 import edu.pascal.gamehandler.api.utils.game.Tickable;
 import edu.pascal.gamehandler.game.GameController;
 import edu.pascal.gamehandler.game.match.Match;
+import edu.pascal.gamehandler.game.match.type.MatchReward;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Getter
@@ -18,12 +16,14 @@ public class MatchManager implements Tickable {
     private final GameController api;
     private final Queue<GameCommand> commands;
     private final List<Match> matches;
+    private final Map<String, MatchReward> rewardMap;
 
 
     public MatchManager(GameController api) {
         this.api = api;
         matches = new ArrayList<>();
         commands = new ConcurrentLinkedQueue<>();
+        rewardMap = new HashMap<>();
     }
 
     @Override

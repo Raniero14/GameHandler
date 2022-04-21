@@ -2,6 +2,8 @@ package edu.pascal.gamehandler.game;
 
 
 import edu.pascal.gamehandler.GameServer;
+import edu.pascal.gamehandler.api.mbot.manager.BotManager;
+import edu.pascal.gamehandler.api.thread.WatchDogThread;
 import edu.pascal.gamehandler.game.match.manager.MatchManager;
 import edu.pascal.gamehandler.game.player.Player;
 import edu.pascal.gamehandler.game.room.GameRoom;
@@ -20,8 +22,11 @@ public class GameController {
     private Thread mainThread;
     private MatchManager matchManager;
     private GameRoomManager gameRoomManager;
+    private BotManager botManager;
     private GameRoom testRoom;
+    private WatchDogThread watchDogThread;
     private int tick;
+    private long lastTick;
     private final Map<UUID, Player> players;
     private final Queue<ConnectionWrapper> joinQueue;
     private final Queue<UUID> quitQueue;
@@ -38,12 +43,14 @@ public class GameController {
         matchManager = new MatchManager(this);
         gameRoomManager = new GameRoomManager(this);
         testRoom = gameRoomManager.createRoom();
+        watchDogThread = new WatchDogThread(this);
         mainThread = new Thread(this::tickLoop);
         mainThread.start();
+        watchDogThread.start();
     }
 
     public void tickLoop() {
-        long lastTick,currentTime,wait,catchupTime = 0;
+        long currentTime,wait,catchupTime = 0;
         lastTick = System.currentTimeMillis();
         while (!shutdown) {
             tick++;

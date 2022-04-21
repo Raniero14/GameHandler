@@ -18,7 +18,6 @@ public class BotManager {
         unpairedBots = new ArrayList<>();
     }
 
-
     public boolean pairBot(Player player) {
         if(unpairedBots.isEmpty()) {
             return false;
@@ -29,7 +28,6 @@ public class BotManager {
         unpairedBots.remove(mBot);
         return true;
     }
-
 
 
 

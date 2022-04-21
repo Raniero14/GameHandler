@@ -19,7 +19,7 @@ public class GameData {
 
     private final Match match;
     private final int startX,startY;
-    private int actualX,actualY;
+    private int actualX,actualY,points;
     private byte[][] matrix = new byte[3][3];
     private MBot pairedBot;
 

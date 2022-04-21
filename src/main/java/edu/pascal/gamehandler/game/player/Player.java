@@ -24,6 +24,18 @@ public class Player {
         connectionWrapper.getWebSocket().send("message;" + str);
     }
 
+    public void sendMovement(String str) {
+        connectionWrapper.getWebSocket().send("movement;" + str);
+    }
+
+    public void allowTurn() {
+        connectionWrapper.getWebSocket().send("yourturn");
+    }
+
+    public void updateStats(int opponentPoints) {
+        connectionWrapper.getWebSocket().send("stats;" + gameData.getPoints() + ";" + opponentPoints);
+    }
+
     public void joinRoom(Room<?> room) {
         currentRoom = room;
         room.handleJoin(this);

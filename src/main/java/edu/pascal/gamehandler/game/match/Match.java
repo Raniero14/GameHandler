@@ -3,6 +3,7 @@ package edu.pascal.gamehandler.game.match;
 import edu.pascal.gamehandler.api.utils.Pathfinder;
 import edu.pascal.gamehandler.api.utils.TimeUtils;
 import edu.pascal.gamehandler.api.utils.game.Tickable;
+import edu.pascal.gamehandler.game.match.manager.MatchManager;
 import edu.pascal.gamehandler.game.match.type.MatchReward;
 import edu.pascal.gamehandler.game.player.Player;
 import edu.pascal.gamehandler.game.player.data.GameData;
@@ -18,12 +19,15 @@ import java.util.concurrent.TimeUnit;
 @Setter
 public class Match implements Tickable {
 
+    private final MatchManager manager;
     private Player player1,player2;
-    private MatchReward reward;
     private UUID currentTurn;
+    private String color;
+    private boolean robotMoving;
     private int timer;
 
-    public Match(Player player1,Player player2) {
+    public Match(MatchManager manager,Player player1,Player player2) {
+        this.manager = manager;
         this.player1 = player1;
         this.player2 = player2;
         player1.setGameData(new GameData(this,2,-1));
@@ -38,10 +42,12 @@ public class Match implements Tickable {
 
     public void moveToCell(Player player,int x,int y) {
         //Request to MBot
-        reward = new MatchReward("black",1000);
     }
 
-
+    public void broadcastMovement(String movement) {
+        player1.sendMovement(movement);
+        player2.sendMovement(movement);
+    }
 
     public void switchTurn() {
         currentTurn = currentTurn.equals(player1.getUuid()) ? player2.getUuid() : player1.getUuid();
@@ -61,15 +67,22 @@ public class Match implements Tickable {
 
     @Override
     public void tick(int currentTick) {
-        Player player = currentTurn.equals(player1.getUuid()) ? player1 : player2;
-        timer -= 50;
-        if(timer == 0) {
-            switchTurn();
-        }
-        if(reward != null) {
-            player.sendMessage("Hai trovato" + reward.getColor() + " guadagnato " + reward.getPoints());
-            reward = null;
-            switchTurn();
+        if(!robotMoving) {
+            Player player = currentTurn.equals(player1.getUuid()) ? player1 : player2;
+            if(color != null) {
+                MatchReward reward = manager.getRewardMap().get(color);
+                player.sendMessage("Hai trovato" + reward.getColor() + " guadagnato " + reward.getPoints());
+                player.getGameData().setPoints(player.getGameData().getPoints() + reward.getPoints());
+                player1.updateStats(player2.getGameData().getPoints());
+                player2.updateStats(player1.getGameData().getPoints());
+                color = null;
+                switchTurn();
+            } else {
+                timer -= 50;
+                if(timer == 0) {
+                    switchTurn();
+                }
+            }
         }
     }
 }

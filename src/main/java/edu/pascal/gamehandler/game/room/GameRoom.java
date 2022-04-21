@@ -36,7 +36,7 @@ public class GameRoom extends Room<List<Match>> {
         while (!waiting.isEmpty()) {
             Player player = waiting.poll();
             Player player2 = waiting.poll();
-            matches.add(new Match(player,player2));
+            matches.add(new Match(api.getMatchManager(),player,player2));
         }
         return matches;
     }
