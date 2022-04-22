@@ -24,6 +24,8 @@ public class MatchManager implements Tickable {
         matches = new ArrayList<>();
         commands = new ConcurrentLinkedQueue<>();
         rewardMap = new HashMap<>();
+        rewardMap.put("blue",new MatchReward("blue",1000));
+        rewardMap.put("white",new MatchReward("white",1000));
     }
 
     @Override

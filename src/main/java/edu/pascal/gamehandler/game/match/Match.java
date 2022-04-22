@@ -46,6 +46,7 @@ public class Match implements Tickable {
     public void moveToCell(Player player,int x,int y) {
         robotMoving = true;
         player.getGameData().getPairedBot().dispatchMovement(x,y);
+
         System.out.println("siuuu");
         //Request to MBot
     }
@@ -58,7 +59,11 @@ public class Match implements Tickable {
     public void switchTurn() {
         currentTurn = currentTurn.equals(player1.getUuid()) ? player2.getUuid() : player1.getUuid();
         timer = TimeUtils.multiplyByTickDelay(11, TimeUnit.SECONDS);
-
+        if(currentTurn == player1.getUuid()) {
+            player1.allowTurn();
+        } else {
+            player2.allowTurn();
+        }
     }
 
     public void endGame(Player winner) {
@@ -77,10 +82,14 @@ public class Match implements Tickable {
             Player player = currentTurn.equals(player1.getUuid()) ? player1 : player2;
             if(color != null) {
                 MatchReward reward = manager.getRewardMap().get(color);
-                player.sendMessage("Hai trovato" + reward.getColor() + " guadagnato " + reward.getPoints());
-                player.getGameData().setPoints(player.getGameData().getPoints() + reward.getPoints());
-                player1.updateStats(player2.getGameData().getPoints());
-                player2.updateStats(player1.getGameData().getPoints());
+                if(reward != null) {
+                    player.sendMessage("Hai trovato" + reward.getColor() + " guadagnato " + reward.getPoints());
+                    player.getGameData().setPoints(player.getGameData().getPoints() + reward.getPoints());
+                    player1.updateStats(player2.getGameData().getPoints());
+                    player2.updateStats(player1.getGameData().getPoints());
+                } else {
+                    player.sendMessage("Non hai trovato nulla :C");
+                }
                 color = null;
                 switchTurn();
             } else {

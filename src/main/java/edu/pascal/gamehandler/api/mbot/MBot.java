@@ -3,6 +3,7 @@ package edu.pascal.gamehandler.api.mbot;
 import edu.pascal.gamehandler.api.mbot.manager.BotManager;
 import edu.pascal.gamehandler.api.utils.path.MovePack;
 import edu.pascal.gamehandler.api.utils.path.PathFinder;
+import edu.pascal.gamehandler.api.utils.reader.LineReader;
 import edu.pascal.gamehandler.game.player.Player;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,7 +31,7 @@ public class MBot {
     private Socket socket;
     private PrintWriter out;
     private InputStream inputStream;
-    private int currentX,currentY,orientation;
+    private int currentX = 1,currentY = 3,orientation;
 
 
     public MBot(BotManager api, String host, int port) {
@@ -45,22 +46,23 @@ public class MBot {
         commandThread.start();
     }
 
+
+    public synchronized boolean isBusy() {
+        return busy;
+    }
+
     public void checkInput() {
         BufferedReader input = new BufferedReader(
                 new InputStreamReader(inputStream));
-        System.out.println(inputStream);
+        LineReader lineReader = new LineReader(input);
         while (!socket.isClosed()) {
             try {
-                System.out.println("siui");
-                String ack = input.readLine();
-                System.out.println("siui2");
-                System.out.println(ack);
+                String ack = lineReader.readLine('#');
                 if(ack.equals("fatto")) {
                     player.getGameData().getMatch().broadcastMovement(lastCommand);
                 } else if(ack.equals("paired") || ack.equals("unpaired")) {
-                    System.out.println("arrivato");
                     busy = false;
-                    return;
+                     continue;
                 } else {
                     player.getGameData().getMatch().setColor(ack);
                 }
@@ -78,7 +80,7 @@ public class MBot {
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 String command = commands.take();
-                while (busy) {}
+                while (isBusy()) {}
                 out.print(command);
                 out.flush();
                 lastCommand = command;
@@ -101,6 +103,7 @@ public class MBot {
     public void dispatchMovement(int x,int y) {
         MovePack movePack = PathFinder.findPath(currentX,currentY,x,y,orientation);
         commands.addAll(movePack.getMoves());
+        commands.add("leggi");
         currentX = x;
         currentY = y;
         orientation = movePack.getOrientation();
