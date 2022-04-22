@@ -32,15 +32,21 @@ public class Match implements Tickable {
         this.player2 = player2;
         player1.setGameData(new GameData(this,2,-1));
         player2.setGameData(new GameData(this,2,-1));
+        manager.getApi().getBotManager().pairBot(player1);
+        manager.getApi().getBotManager().pairBot(player2);
         player1.getGameData().generateMap();
         player1.getGameData().generateMap();
         currentTurn = player1.getUuid();
+        player1.allowTurn();
         player1.sendMessage("è il turno tuo");
     }
 
 
 
     public void moveToCell(Player player,int x,int y) {
+        robotMoving = true;
+        player.getGameData().getPairedBot().dispatchMovement(x,y);
+        System.out.println("siuuu");
         //Request to MBot
     }
 

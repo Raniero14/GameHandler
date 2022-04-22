@@ -41,16 +41,26 @@ public class MBot {
         connect();
         inputThread = new Thread(this::checkInput);
         commandThread = new Thread(this::checkQueue);
+        inputThread.start();
+        commandThread.start();
     }
 
     public void checkInput() {
         BufferedReader input = new BufferedReader(
-                new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+                new InputStreamReader(inputStream));
+        System.out.println(inputStream);
         while (!socket.isClosed()) {
             try {
+                System.out.println("siui");
                 String ack = input.readLine();
+                System.out.println("siui2");
+                System.out.println(ack);
                 if(ack.equals("fatto")) {
                     player.getGameData().getMatch().broadcastMovement(lastCommand);
+                } else if(ack.equals("paired") || ack.equals("unpaired")) {
+                    System.out.println("arrivato");
+                    busy = false;
+                    return;
                 } else {
                     player.getGameData().getMatch().setColor(ack);
                 }
@@ -79,6 +89,15 @@ public class MBot {
         }
     }
 
+    public void setPaired() {
+
+        commands.add("setpaired");
+    }
+
+    public void unpair() {
+        commands.add("unpair");
+    }
+
     public void dispatchMovement(int x,int y) {
         MovePack movePack = PathFinder.findPath(currentX,currentY,x,y,orientation);
         commands.addAll(movePack.getMoves());
@@ -91,6 +110,7 @@ public class MBot {
         try {
             socket = new Socket(host,port);
             inputStream = socket.getInputStream();
+            out = new PrintWriter(socket.getOutputStream(), true);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -16,6 +16,13 @@ public class BotManager {
         this.server = handler;
         pairedBots = new HashMap<>();
         unpairedBots = new ArrayList<>();
+        connectBots();
+    }
+
+
+    public void connectBots() {
+        unpairedBots.add(new MBot(this,"192.168.0.56",2500));
+        unpairedBots.add(new MBot(this,"192.168.0.92",2500));
     }
 
     public boolean pairBot(Player player) {
@@ -24,7 +31,9 @@ public class BotManager {
         }
         MBot mBot = unpairedBots.get(0);
         mBot.setPlayer(player);
+        mBot.setPaired();
         pairedBots.put(player.getUuid(),mBot);
+        player.getGameData().setPairedBot(mBot);
         unpairedBots.remove(mBot);
         return true;
     }

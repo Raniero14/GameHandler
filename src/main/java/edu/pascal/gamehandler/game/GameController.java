@@ -43,10 +43,11 @@ public class GameController {
         matchManager = new MatchManager(this);
         gameRoomManager = new GameRoomManager(this);
         testRoom = gameRoomManager.createRoom();
+        botManager = new BotManager(api);
         watchDogThread = new WatchDogThread(this);
         mainThread = new Thread(this::tickLoop);
         mainThread.start();
-        watchDogThread.start();
+        //watchDogThread.start();
     }
 
     public void tickLoop() {

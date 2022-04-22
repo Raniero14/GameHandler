@@ -38,7 +38,6 @@ public class PathFinder {
                 resolvedX++;
             }
         }
-        System.out.println(currentOrientation);
         while (resolvedY != toY) {
             if(toY < resolvedY) {
                 while (currentOrientation != 0) {
