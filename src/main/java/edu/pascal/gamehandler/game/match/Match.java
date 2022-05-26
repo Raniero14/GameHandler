@@ -37,8 +37,8 @@ public class Match implements Tickable {
         player1.getGameData().generateMap();
         player1.getGameData().generateMap();
         currentTurn = player1.getUuid();
-        player1.allowTurn();
-        player1.sendMessage("è il turno tuo");
+        player1.updateTurn(currentTurn);
+        player2.updateTurn(currentTurn);
     }
 
 
@@ -51,19 +51,16 @@ public class Match implements Tickable {
         //Request to MBot
     }
 
-    public void broadcastMovement(String movement) {
-        player1.sendMovement(movement);
-        player2.sendMovement(movement);
+    public void broadcastMovement(UUID uuid,String movement) {
+        player1.sendMovement(uuid,movement);
+        player2.sendMovement(uuid,movement);
     }
 
     public void switchTurn() {
         currentTurn = currentTurn.equals(player1.getUuid()) ? player2.getUuid() : player1.getUuid();
         timer = TimeUtils.multiplyByTickDelay(11, TimeUnit.SECONDS);
-        if(currentTurn == player1.getUuid()) {
-            player1.allowTurn();
-        } else {
-            player2.allowTurn();
-        }
+        player1.updateTurn(currentTurn);
+        player2.updateTurn(currentTurn);
     }
 
     public void endGame(Player winner) {

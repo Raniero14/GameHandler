@@ -116,7 +116,7 @@ public class GameController {
         UUID uuid = UUID.randomUUID();
         wrapper.setUuid(uuid);
         Player player = new Player(uuid,wrapper);
-        player.sendMessage("il tuo UUID è: " + uuid);
+        player.getConnectionWrapper().getWebSocket().send("assign;" + uuid);
         players.put(uuid,player);
         player.joinRoom(testRoom);
     }

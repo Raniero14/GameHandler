@@ -24,12 +24,12 @@ public class Player {
         connectionWrapper.getWebSocket().send("message;" + str);
     }
 
-    public void sendMovement(String str) {
-        connectionWrapper.getWebSocket().send("movement;" + str);
+    public void sendMovement(UUID uuid,String str) {
+        connectionWrapper.getWebSocket().send("move;" + str + ";" + uuid);
     }
 
-    public void allowTurn() {
-        connectionWrapper.getWebSocket().send("yourturn");
+    public void updateTurn(UUID uuid) {
+        connectionWrapper.getWebSocket().send("turn;" + uuid);
     }
 
     public void updateStats(int opponentPoints) {

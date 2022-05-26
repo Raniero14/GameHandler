@@ -59,7 +59,7 @@ public class MBot {
             try {
                 String ack = lineReader.readLine('#');
                 if(ack.equals("fatto")) {
-                    player.getGameData().getMatch().broadcastMovement(lastCommand);
+                    player.getGameData().getMatch().broadcastMovement(player.getUuid(),lastCommand);
                 } else if(ack.equals("paired") || ack.equals("unpaired")) {
                     busy = false;
                      continue;
