@@ -37,9 +37,8 @@ public class MatchManager implements Tickable {
                 String[] array = gameCommand.getCommand().split(";");
                 switch (array[0].toLowerCase(Locale.ROOT)) {
                     case "move":
-                        int casella = Integer.parseInt(array[1]);
-                        int x = casella % 3;
-                        int y = casella / 3;
+                        int x = Integer.parseInt(array[1]);
+                        int y = Integer.parseInt(array[2]);
                         match.moveToCell(gameCommand.getPlayer(),x,y);
                         break;
                 }
