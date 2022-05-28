@@ -21,8 +21,8 @@ public class BotManager {
 
 
     public void connectBots() {
-        unpairedBots.add(new MBot(this,"192.168.1.74",2500));
-        unpairedBots.add(new MBot(this,"192.168.1.74",2500));
+        unpairedBots.add(new MBot(this,"192.168.0.50",2500));
+        unpairedBots.add(new MBot(this,"192.168.0.56",2500));
     }
 
     public boolean pairBot(Player player) {

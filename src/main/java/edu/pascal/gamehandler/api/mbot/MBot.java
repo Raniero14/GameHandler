@@ -102,6 +102,7 @@ public class MBot {
 
     public void dispatchMovement(int x,int y) {
         MovePack movePack = PathFinder.findPath(currentX,currentY,x,y,orientation);
+        System.out.println(movePack.getMoves());
         commands.addAll(movePack.getMoves());
         commands.add("leggi");
         currentX = x;

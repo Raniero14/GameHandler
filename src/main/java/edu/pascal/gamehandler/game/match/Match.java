@@ -80,13 +80,14 @@ public class Match implements Tickable {
             if(color != null) {
                 MatchReward reward = manager.getRewardMap().get(color);
                 if(reward != null) {
-                    player.sendMessage("Hai trovato" + reward.getColor() + " guadagnato " + reward.getPoints());
+                    player.sendMessage("Hai trovato " + reward.getColor() + " e hai guadagnato " + reward.getPoints() + " punti");
                     player.getGameData().setPoints(player.getGameData().getPoints() + reward.getPoints());
-                    player1.updateStats(player2.getGameData().getPoints());
-                    player2.updateStats(player1.getGameData().getPoints());
                 } else {
-                    player.sendMessage("Non hai trovato nulla :C");
+                    player.sendMessage("Non hai trovato nulla :C (+500)");
+                    player.getGameData().setPoints(player.getGameData().getPoints() + 500);
                 }
+                player1.updateStats(player2.getGameData().getPoints());
+                player2.updateStats(player1.getGameData().getPoints());
                 color = null;
                 switchTurn();
             } else {
